@@ -44,8 +44,21 @@ function MobileNavItem({ to, icon, label }: { to: string, icon: React.ReactNode,
 
 function App() {
   const { t, i18n } = useTranslation();
-  const [user, setUser] = useState<{ name: string, role: string } | null>(null);
+  const [user, setUser] = useState<{ name: string, role: string } | null>(() => {
+    const savedUser = localStorage.getItem('vrs_user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const handleLogin = (userData: any) => {
+    localStorage.setItem('vrs_user', JSON.stringify(userData));
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('vrs_user');
+    setUser(null);
+  };
 
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'en' ? 'ta' : 'en');
@@ -57,7 +70,7 @@ function App() {
   };
 
   if (!user) {
-    return <LoginScreen onLogin={setUser} />;
+    return <LoginScreen onLogin={handleLogin} />;
   }
 
   return (
@@ -88,7 +101,7 @@ function App() {
                 {i18n.language === 'en' ? 'தமிழ்' : 'English'}
               </button>
               <button 
-                onClick={() => setUser(null)}
+                onClick={handleLogout}
                 className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
               >
                 <LogOut size={20} />

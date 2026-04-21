@@ -17,8 +17,8 @@ export default function MenuManagement() {
   const fetchData = async () => {
     try {
       const [itemsRes, catsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/menu'),
-        fetch('http://localhost:5000/api/categories')
+        fetch(`${import.meta.env.VITE_API_URL}/menu`),
+        fetch(`${import.meta.env.VITE_API_URL}/categories`)
       ]);
       const itemsData = await itemsRes.json();
       const catsData = await catsRes.json();
@@ -50,8 +50,8 @@ export default function MenuManagement() {
 
     try {
       const url = editingItem 
-        ? `http://localhost:5000/api/menu/${editingItem.id}` 
-        : 'http://localhost:5000/api/menu';
+        ? `${import.meta.env.VITE_API_URL}/menu/${editingItem.id}` 
+        : `${import.meta.env.VITE_API_URL}/menu`;
       
       const response = await fetch(url, {
         method: editingItem ? 'PUT' : 'POST',
@@ -71,7 +71,7 @@ export default function MenuManagement() {
   const handleDelete = async (id: number) => {
     if (window.confirm("Are you sure you want to delete this item? / இந்த பொருளை நீக்க வேண்டுமா?")) {
       try {
-        const response = await fetch(`http://localhost:5000/api/menu/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/menu/${id}`, {
           method: 'DELETE'
         });
         if (response.ok) {

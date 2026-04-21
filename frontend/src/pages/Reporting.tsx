@@ -16,7 +16,7 @@ export default function Reporting() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/reports?range=${range}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/reports?range=${range}`);
       const json = await res.json();
       setData(json);
     } catch (err) {

@@ -55,8 +55,8 @@ export default function BillingScreen() {
   }, [menuItems]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/categories').then(res => res.json()).then(setCategories);
-    fetch('http://localhost:5000/api/menu').then(res => res.json()).then(setMenuItems);
+    fetch(`${import.meta.env.VITE_API_URL}/categories`).then(res => res.json()).then(setCategories);
+    fetch(`${import.meta.env.VITE_API_URL}/menu`).then(res => res.json()).then(setMenuItems);
   }, []);
 
   const addToCart = useCallback((item: MenuItem) => {

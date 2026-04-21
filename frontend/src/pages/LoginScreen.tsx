@@ -26,7 +26,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
     if (pin.length !== 4) return;
     
     try {
-      const res = await fetch('http://localhost:5000/api/login', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pin })
