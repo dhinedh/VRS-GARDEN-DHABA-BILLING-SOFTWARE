@@ -9,7 +9,15 @@ app.use(express.json());
 // Auth
 app.post('/api/login', async (req, res) => {
   const { pin } = req.body;
-  console.log('Login attempt received for PIN:', pin);
+  
+  // Check if keys are configured (especially on Render)
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+    console.error('CRITICAL: Supabase keys are missing from environment variables!');
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Server Configuration Error: Missing API Keys on Host' 
+    });
+  }
 
   if (!pin) {
     return res.status(400).json({ success: false, message: 'PIN is required' });
@@ -23,18 +31,20 @@ app.post('/api/login', async (req, res) => {
       .single();
 
     if (error) {
-      console.error('Supabase Error:', error.message);
-      return res.status(401).json({ success: false, message: 'Invalid PIN' });
+      if (error.code === 'PGRST116') { // No rows found
+        return res.status(401).json({ success: false, message: 'Invalid PIN' });
+      }
+      console.error('Supabase DB Error:', error.message);
+      return res.status(500).json({ success: false, message: 'Database Connection Error: ' + error.message });
     }
 
     if (user) {
-      console.log('Login successful for user:', user.name);
       res.json({ success: true, user });
     } else {
       res.status(401).json({ success: false, message: 'Invalid PIN' });
     }
   } catch (err) {
-    console.error('Server Error:', err);
+    console.error('Internal Server Error:', err);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
