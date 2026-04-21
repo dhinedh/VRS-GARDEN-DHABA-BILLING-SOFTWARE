@@ -9,16 +9,33 @@ app.use(express.json());
 // Auth
 app.post('/api/login', async (req, res) => {
   const { pin } = req.body;
-  const { data: user, error } = await supabase
-    .from('users')
-    .select('id, name, role')
-    .eq('pin', pin)
-    .single();
+  console.log('Login attempt received for PIN:', pin);
 
-  if (user) {
-    res.json({ success: true, user });
-  } else {
-    res.status(401).json({ success: false, message: 'Invalid PIN' });
+  if (!pin) {
+    return res.status(400).json({ success: false, message: 'PIN is required' });
+  }
+
+  try {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id, name, role')
+      .eq('pin', String(pin).trim())
+      .single();
+
+    if (error) {
+      console.error('Supabase Error:', error.message);
+      return res.status(401).json({ success: false, message: 'Invalid PIN' });
+    }
+
+    if (user) {
+      console.log('Login successful for user:', user.name);
+      res.json({ success: true, user });
+    } else {
+      res.status(401).json({ success: false, message: 'Invalid PIN' });
+    }
+  } catch (err) {
+    console.error('Server Error:', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
