@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brandGreen: #2E7D32;
+  --color-brandLightGreen: #4CAF50;
+  --color-brandSaffron: #F4511E;
+  --color-brandLightSaffron: #FF5722;
+  --color-darkBg: #121212;
+  --color-darkSurface: #1E1E1E;
+  --color-darkBorder: #333333;
+  --font-tamil: '"Noto Sans Tamil"', sans-serif;
+  --font-sans: 'Inter', '"Noto Sans Tamil"', sans-serif;
+  
+  --animate-spin-slow: spin 4s linear infinite;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+  }
+  
+  .dark body {
+    @apply bg-darkBg text-gray-100;
+  }
+}
+
+/* Custom Scrollbar for POS feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-gray-700;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
+}
