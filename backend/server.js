@@ -3,7 +3,15 @@ import cors from 'cors';
 import { supabase } from './supabase.js';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://vrs-garden-dhaba-billing-software.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:5174'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Auth
